@@ -30,12 +30,29 @@ module ActsAsTaggableOn::Taggable
               tag_list_on('#{tags_type}')
             end
 
-            def #{tag_type}_list=(new_tags)
-              set_tag_list_on('#{tags_type}', new_tags)
-            end
-
             def all_#{tags_type}_list
               all_tags_list_on('#{tags_type}')
+            end
+
+            def #{tag_type}_list=(new_tags)
+              if new_tags.is_a?(Array)
+                @tags = new_tags
+              else
+                @tags = new_tags.split(', ')
+              end
+              @tags.map{|t| self.send('#{tags_type.singularize}_list') << t}
+
+              # set_tag_list_on('#{tags_type}', new_tags)
+            end
+
+            def delete_#{tag_type}_list(tags)
+              if tags.is_a?(Array)
+                @tags = tags
+              else
+                @tags = tags.split(', ')
+              end
+
+              @tags.map{|t| self.send('#{tags_type.singularize}_list').delete(t)}
             end
           )
         end        

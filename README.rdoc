@@ -89,6 +89,44 @@ rake spec:plugins
     User.skill_counts # => [<Tag name="joking" count=2>,<Tag name="clowning" count=1>...]
     @frankie.skill_counts
 
+
+== My Modifications
+Assignation Method '=' now allows do assignation in a non destructive way, i.e.
+    @user.skill_list = "joking, clowning, boxing"
+    @user.skill_list = "a, b, c"
+    @user.skill_list
+    # => ["joking","clowning","boxing", "a", "b", "c"] as TagList
+    @user.save
+    
+Notice that assign was in a non destructive way, in the sense that it allows keep the old values plus the new ones.
+
+
+Added method delete_skill_list
+    @user.skill_list
+    # => ["joking","clowning","boxing", "a", "b", "c"] as TagList
+    @user.delete_skill_list("a, b, c")
+    @user.skill_list
+    # => ["joking","clowning","boxing"] as TagList
+    @user.save
+
+The above methods were added to be consistent with the behaviour that I usually use to tags in my apps, so now I can pass in params directly the following methods without loose previous loaded tags and deleting the desires ones quickly, e.g.:
+
+  @user.skill_list
+  # => ["joking", "ridding"]
+
+Later I pass the following hash from my form  
+
+  "user"=>{"delete_skill_list"=>"joking", "skill_list"=>"clowning, boxing", ...}
+
+and in my controller I just do
+
+  @user.update_attributes(params[:user])
+
+then I got
+
+  @user.skill_list
+  # => ["ridding", "clowning", "boxing"]
+
 === Finding Tagged Objects
 
 Acts As Taggable On utilizes named_scopes to create an association for tags.
