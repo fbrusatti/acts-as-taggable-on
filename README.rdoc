@@ -90,8 +90,9 @@ rake spec:plugins
     @frankie.skill_counts
 
 
-== My Modifications
-Assignation Method '=' now allows do assignation in a non destructive way, i.e.
+=== My Modifications/Additions
+
+Assign Method '=' now allows do assignation in a non destructive way, i.e.
     @user.skill_list = "joking, clowning, boxing"
     @user.skill_list = "a, b, c"
     @user.skill_list
@@ -114,15 +115,15 @@ The above methods were added to be consistent with the behaviour that I usually 
   @user.skill_list
   # => ["joking", "ridding"]
 
-Later I pass the following hash from my form  
+Later you can pass a hast like the following one from the view form  
 
   "user"=>{"delete_skill_list"=>"joking", "skill_list"=>"clowning, boxing", ...}
 
-and in my controller I just do
+into the controller you just have to do
 
   @user.update_attributes(params[:user])
 
-then I got
+then you will get
 
   @user.skill_list
   # => ["ridding", "clowning", "boxing"]

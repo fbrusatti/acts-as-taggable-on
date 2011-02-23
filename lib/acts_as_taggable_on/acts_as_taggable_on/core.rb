@@ -26,6 +26,8 @@ module ActsAsTaggableOn::Taggable
           end
 
           class_eval %(
+            attr_accessible :#{tag_type}_list, :delete_#{tag_type}_list
+
             def #{tag_type}_list
               tag_list_on('#{tags_type}')
             end
@@ -45,7 +47,7 @@ module ActsAsTaggableOn::Taggable
               # set_tag_list_on('#{tags_type}', new_tags)
             end
 
-            def delete_#{tag_type}_list(tags)
+            def delete_#{tag_type}_list=(tags)
               if tags.is_a?(Array)
                 @tags = tags
               else
